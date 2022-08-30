@@ -12,6 +12,7 @@ today = datetime.strptime(str(nowtime.date()), "%Y-%m-%d") #今天的日期
 start_date = os.getenv('START_DATE')
 city = os.getenv('CITY')
 birthday = os.getenv('BIRTHDAY')
+birthday2 = os.getenv('BIRTHDAY2')
 
 app_id = os.getenv('APP_ID')
 app_secret = os.getenv('APP_SECRET')
@@ -57,12 +58,22 @@ def get_memorial_days_count():
   delta = today - datetime.strptime(start_date, "%Y-%m-%d")
   return delta.days
 
-# 生日倒计时
+# 生日倒计时(女友)
 def get_birthday_left():
   if birthday is None:
     print('没有设置 BIRTHDAY')
     return 0
   next = datetime.strptime(str(today.year) + "-" + birthday, "%Y-%m-%d")
+  if next < nowtime:
+    next = next.replace(year=next.year + 1)
+  return (next - today).days
+
+# 生日倒计时(自己)
+def get_birthday_left2():
+  if birthday2 is None:
+    print('没有设置 BIRTHDAY2')
+    return 0
+  next = datetime.strptime(str(today.year) + "-" + birthday2, "%Y-%m-%d")
   if next < nowtime:
     next = next.replace(year=next.year + 1)
   return (next - today).days
@@ -143,6 +154,10 @@ data = {
   },
   "birthday_left": {
     "value": get_birthday_left(),
+    "color": get_random_color()
+  },
+  "birthday_left2": {
+    "value": get_birthday_left2(),
     "color": get_random_color()
   },
   "words": {
